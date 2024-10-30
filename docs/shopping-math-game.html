@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.10.17/interact.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .draggable {
+      touch-action: none;
+      user-select: none;
+    }
+    
+    .dropzone.active {
+      animation: bounce 0.5s;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .coin { transition: transform 0.15s; }
+    .coin:hover { transform: scale(1.1); }
+    .coin:active { transform: scale(0.95); }
+  </style>
+</head>
+<body class="bg-purple-50 min-h-screen p-8">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold text-center text-purple-800 mb-8">Shopping Math</h1>
+    
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+      <div class="text-xl font-bold text-gray-800 mb-4">
+        Target Amount: $<span id="target-amount">0.00</span>
+      </div>
+      <div class="text-lg text-gray-600 mb-2">
+        Current Total: $<span id="current-total">0.00</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-8">
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Money</h2>
+        <div class="grid grid-cols-3 gap-4" id="money-container">
+          <!-- Money items will be inserted here -->
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <div id="basket" class="border-4 border-dashed border-gray-300 rounded-xl h-64 flex items-center justify-center">
+          <div class="text-gray-400 text-lg">Drop money here</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const moneyItems = [
+      { value: 10.00, label: '$10', color: 'green-500' },
+      { value: 5.00, label: '$5', color: 'blue-500' },
+      { value: 1.00, label: '$1', color: 'gray-500' },
+      { value: 0.25, label: '25¢', color: 'yellow-500' },
+      { value: 0.10, label: '10¢', color: 'red-500' },
+      { value: 0.05, label: '5¢', color: 'purple-500' },
+    ];
+
+    let currentTotal = 0;
+    let targetAmount = 0;
+    const droppedItems = new Set();
+
+    function generateNewTarget() {
+      targetAmount = Math.round(Math.random() * 20 * 20) / 20; // Random amount up to $20
+      document.getElementById('target-amount').textContent = targetAmount.toFixed(2);
+      currentTotal = 0;
+      document.getElementById('current-total').textContent = '0.00';
+      droppedItems.clear();
+    }
+
+    function createMoneyItems() {
+      const container = document.getElementById('money-container');
+      moneyItems.forEach((item, index) => {
+        const element = document.createElement('div');
+        element.className = `draggable coin bg-${item.color} text-white font-bold rounded-full h-20 w-20 flex items-center justify-center cursor-move shadow-lg`;
+        element.setAttribute('data-value', item.value);
+        element.setAttribute('data-id', `money-${index}`);
+        element.textContent = item.label;
+        container.appendChild(element);
+      });
+    }
+
+    function initializeDragAndDrop() {
+      interact('.draggable').draggable({
+        inertia: true,
+        modifiers: [
+          interact.modifiers.restrictRect({
+            restriction: 'parent',
+            endOnly: true
+          })
+        ],
+        autoScroll: true,
+        listeners: {
+          move: dragMoveListener,
+        }
+      });
+
+      interact('#basket').dropzone({
+        accept: '.draggable',
+        overlap: 0.75,
+        ondropactivate: function (event) {
+          event.target.classList.add('drop-active');
+        },
+        ondragenter: function (event) {
+          event.target.classList.add('drop-target');
+        },
+        ondragleave: function (event) {
+          event.target.classList.remove('drop-target');
+        },
+        ondrop: function (event) {
+          const draggedItem = event.relatedTarget;
+          const itemId = draggedItem.getAttribute('data-id');
+          
+          if (!droppedItems.has(itemId)) {
+            const value = parseFloat(draggedItem.getAttribute('data-value'));
+            currentTotal += value;
+            document.getElementById('current-total').textContent = currentTotal.toFixed(2);
+            droppedItems.add(itemId);
+            
+            event.target.classList.add('active');
+            setTimeout(() => event.target.classList.remove('active'), 500);
+
+            if (Math.abs(currentTotal - targetAmount) < 0.01) {
+              alert('Congratulations! You got the correct amount!');
+              generateNewTarget();
+            }
+          }
+        },
+        ondropdeactivate: function (event) {
+          event.target.classList.remove('drop-active');
+          event.target.classList.remove('drop-target');
+        }
+      });
+    }
+
+    function dragMoveListener(event) {
+      const target = event.target;
+      const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+      const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+      target.style.transform = `translate(${x}px, ${y}px)`;
+      target.setAttribute('data-x', x);
+      target.setAttribute('data-y', y);
+    }
+
+    // Initialize the game
+    createMoneyItems();
+    initializeDragAndDrop();
+    generateNewTarget();
+  </script>
+</body>
+</html>
