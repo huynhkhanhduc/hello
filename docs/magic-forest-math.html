@@ -6,308 +6,260 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
+    .character {
+      transition: left 0.5s ease;
+    }
+    .character.hopping {
+      animation: hop 0.5s ease;
+    }
     @keyframes hop {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-20px); }
     }
-    
-    .character {
-      transition: left 0.5s ease;
+    .progress-path {
+      background: linear-gradient(90deg, #4a5568 50%, #718096 50%);
+      background-size: 20px 100%;
     }
-    
-    .character.hopping {
-      animation: hop 0.5s ease;
-    }
-
     .stone-glow {
       animation: glow 2s infinite;
     }
-
     @keyframes glow {
       0%, 100% { box-shadow: 0 0 5px #ffd700; }
       50% { box-shadow: 0 0 20px #ffd700; }
-    }
-
-    .progress-path {
-      background: repeating-linear-gradient(
-        90deg,
-        #4a5568,
-        #4a5568 10px,
-        #718096 10px,
-        #718096 20px
-      );
-    }
-
-    .animal-option {
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-
-    .animal-option:hover {
-      transform: scale(1.1);
-    }
-
-    .animal-option.selected {
-      background-color: #4ade80;
-      transform: scale(1.1);
-    }
-
-    .math-type-btn.selected {
-      background-color: #4ade80;
-    }
-
-    .difficulty-btn.selected {
-      transform: scale(1.1);
     }
   </style>
 </head>
 <body class="bg-green-50 min-h-screen p-4">
   <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6">
-    <!-- Header -->
-    <div class="text-center mb-8">
-      <h1 class="text-4xl font-bold text-green-800 mb-4">Magic Forest Adventure</h1>
+    <!-- Game Header -->
+    <div class="text-center mb-6">
+      <h1 class="text-3xl font-bold text-green-800">Magic Forest Math</h1>
       
       <!-- Animal Selection -->
-      <div class="mb-6">
-        <h2 class="text-lg text-green-600 mb-2">Choose your animal:</h2>
-        <div class="flex justify-center gap-4 flex-wrap">
-          <div class="animal-option text-4xl p-3 rounded-lg bg-green-100" data-animal="🐨">🐨</div>
-          <div class="animal-option text-4xl p-3 rounded-lg bg-green-100" data-animal="🦉">🦉</div>
-          <div class="animal-option text-4xl p-3 rounded-lg bg-green-100" data-animal="🦒">🦒</div>
-          <div class="animal-option text-4xl p-3 rounded-lg bg-green-100" data-animal="🐘">🐘</div>
-          <div class="animal-option text-4xl p-3 rounded-lg bg-green-100" data-animal="🦁">🦁</div>
-          <div class="animal-option text-4xl p-3 rounded-lg bg-green-100" data-animal="🐸">🐸</div>
-          <div class="animal-option text-4xl p-3 rounded-lg bg-green-100" data-animal="🦊">🦊</div>
-          <div class="animal-option text-4xl p-3 rounded-lg bg-green-100" data-animal="🐼">🐼</div>
+      <div class="my-4">
+        <div class="grid grid-cols-4 sm:grid-cols-8 gap-2">
+          <div class="animal p-2 rounded-lg bg-green-100 cursor-pointer hover:scale-110 transition-transform text-2xl text-center" data-animal="🐨">🐨</div>
+          <div class="animal p-2 rounded-lg bg-green-100 cursor-pointer hover:scale-110 transition-transform text-2xl text-center" data-animal="🦉">🦉</div>
+          <div class="animal p-2 rounded-lg bg-green-100 cursor-pointer hover:scale-110 transition-transform text-2xl text-center" data-animal="🦒">🦒</div>
+          <div class="animal p-2 rounded-lg bg-green-100 cursor-pointer hover:scale-110 transition-transform text-2xl text-center" data-animal="🐘">🐘</div>
+          <div class="animal p-2 rounded-lg bg-green-100 cursor-pointer hover:scale-110 transition-transform text-2xl text-center" data-animal="🦁">🦁</div>
+          <div class="animal p-2 rounded-lg bg-green-100 cursor-pointer hover:scale-110 transition-transform text-2xl text-center" data-animal="🐸">🐸</div>
+          <div class="animal p-2 rounded-lg bg-green-100 cursor-pointer hover:scale-110 transition-transform text-2xl text-center" data-animal="🦊">🦊</div>
+          <div class="animal p-2 rounded-lg bg-green-100 cursor-pointer hover:scale-110 transition-transform text-2xl text-center" data-animal="🐼">🐼</div>
         </div>
       </div>
 
-      <!-- Math Type Selection -->
-      <div class="mb-6">
-        <h2 class="text-lg text-green-600 mb-2">Choose math type:</h2>
-        <div class="flex justify-center gap-4 flex-wrap">
-          <button class="math-type-btn px-4 py-2 rounded-lg bg-yellow-300 hover:bg-yellow-400" data-type="+">Addition</button>
-          <button class="math-type-btn px-4 py-2 rounded-lg bg-blue-300 hover:bg-blue-400" data-type="-">Subtraction</button>
-          <button class="math-type-btn px-4 py-2 rounded-lg bg-purple-300 hover:bg-purple-400" data-type="×">Multiplication</button>
-          <button class="math-type-btn px-4 py-2 rounded-lg bg-pink-300 hover:bg-pink-400" data-type="÷">Division</button>
+      <!-- Math Types -->
+      <div class="my-4">
+        <p class="text-sm text-gray-600 mb-2">Select at least one math type</p>
+        <div class="flex flex-wrap justify-center gap-2">
+          <button class="math-type px-4 py-2 rounded-lg bg-yellow-100 hover:bg-yellow-200" data-type="+">Addition</button>
+          <button class="math-type px-4 py-2 rounded-lg bg-blue-100 hover:bg-blue-200" data-type="-">Subtraction</button>
+          <button class="math-type px-4 py-2 rounded-lg bg-purple-100 hover:bg-purple-200" data-type="×">Multiplication</button>
+          <button class="math-type px-4 py-2 rounded-lg bg-pink-100 hover:bg-pink-200" data-type="÷">Division</button>
         </div>
       </div>
 
-      <!-- Difficulty Selection -->
-      <div class="mb-6">
-        <h2 class="text-lg text-green-600 mb-2">Choose difficulty:</h2>
-        <div class="flex justify-center gap-4 flex-wrap">
-          <button class="difficulty-btn px-4 py-2 rounded-lg bg-green-300 hover:bg-green-400" data-difficulty="easy">Easy</button>
-          <button class="difficulty-btn px-4 py-2 rounded-lg bg-yellow-300 hover:bg-yellow-400" data-difficulty="medium">Medium</button>
-          <button class="difficulty-btn px-4 py-2 rounded-lg bg-orange-300 hover:bg-orange-400" data-difficulty="hard">Hard</button>
-          <button class="difficulty-btn px-4 py-2 rounded-lg bg-red-300 hover:bg-red-400" data-difficulty="very-hard">Very Hard</button>
+      <!-- Difficulty -->
+      <div class="my-4">
+        <div class="flex flex-wrap justify-center gap-2">
+          <button class="difficulty px-4 py-2 rounded-lg bg-green-100 hover:bg-green-200" data-level="easy">Easy</button>
+          <button class="difficulty px-4 py-2 rounded-lg bg-yellow-100 hover:bg-yellow-200" data-level="medium">Medium</button>
+          <button class="difficulty px-4 py-2 rounded-lg bg-orange-100 hover:bg-orange-200" data-level="hard">Hard</button>
+          <button class="difficulty px-4 py-2 rounded-lg bg-red-100 hover:bg-red-200" data-level="expert">Expert</button>
         </div>
       </div>
     </div>
 
-    <!-- Progress Bar -->
-    <div class="relative h-20 mb-8">
+    <!-- Game Area -->
+    <div class="relative h-20 mb-4">
       <div class="progress-path absolute w-full h-4 rounded-full top-8"></div>
-      <div id="character" class="character absolute text-4xl" style="left: 0; top: 0">🐨</div>
-      <div class="home absolute right-0 text-4xl">🏠</div>
+      <div id="character" class="character absolute text-3xl" style="left: 0; top: 0">🐨</div>
+      <div class="absolute right-0 top-0 text-3xl">🏠</div>
     </div>
 
-    <!-- Score and Level -->
-    <div class="flex justify-between mb-8">
-      <div class="text-lg font-bold text-green-600">Magic Stones: <span id="score">0</span></div>
+    <!-- Score Area -->
+    <div class="flex justify-between items-center mb-4">
+      <div class="text-lg font-bold text-green-600">Score: <span id="score">0</span></div>
       <div class="text-lg font-bold text-purple-600">Level: <span id="level">1</span></div>
+      <button id="resetBtn" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">Reset</button>
     </div>
 
-    <!-- Math Problem -->
-    <div class="bg-green-100 rounded-xl p-8 mb-8 text-center">
-      <div id="problem" class="text-3xl font-bold text-green-800 mb-6"></div>
-      <div id="options" class="grid grid-cols-2 gap-4">
-      </div>
+    <!-- Problem Area -->
+    <div class="bg-green-50 rounded-xl p-6 mb-4">
+      <div id="problem" class="text-2xl font-bold text-center mb-4"></div>
+      <div id="options" class="grid grid-cols-2 gap-4"></div>
     </div>
 
-    <!-- Magic Stones Collection -->
-    <div id="stones" class="flex flex-wrap gap-2">
-    </div>
+    <!-- Stones Collection -->
+    <div id="stones" class="flex flex-wrap gap-2"></div>
 
     <!-- Victory Screen -->
-    <div id="victory" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div class="bg-white rounded-xl p-8 text-center">
-        <h2 class="text-3xl font-extrabold text-green-800 mb-4">🎉 Congratulations! 🎉</h2>
-        <p class="text-xl mb-6">You made it home!</p>
-        <button onclick="resetGame()" class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
-          Play Again
-        </button>
+    <div id="victory" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center">
+      <div class="bg-white p-6 rounded-xl text-center">
+        <h2 class="text-2xl font-bold mb-4">🎉 Victory! 🎉</h2>
+        <button onclick="resetGame()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Play Again</button>
       </div>
     </div>
   </div>
 
   <script>
-    let score = 0;
-    let level = 1;
-    let correctAnswer = 0;
-    let selectedMathType = '+';
-    let selectedDifficulty = 'easy';
-    const totalLevels = 5;
-    const questionsPerLevel = 5;
-    
-    const difficultySettings = {
-      'easy': { maxNumber: 10, questionsPerLevel: 5 },
-      'medium': { maxNumber: 20, questionsPerLevel: 7 },
-      'hard': { maxNumber: 50, questionsPerLevel: 10 },
-      'very-hard': { maxNumber: 100, questionsPerLevel: 12 }
+    const gameState = {
+      score: 0,
+      level: 1,
+      mathTypes: new Set(['+', '-']),
+      difficulty: 'easy',
+      character: '🐨',
+      currentAnswer: null,
+      difficulties: {
+        easy: { maxNum: 10, problems: 5 },
+        medium: { maxNum: 20, problems: 8 },
+        hard: { maxNum: 50, problems: 10 },
+        expert: { maxNum: 100, problems: 15 }
+      },
+      maxLevels: 5
     };
 
-    function initializeGame() {
-      // Animal selection
-      document.querySelectorAll('.animal-option').forEach(option => {
-        option.addEventListener('click', function() {
-          document.querySelectorAll('.animal-option').forEach(opt => opt.classList.remove('selected'));
-          this.classList.add('selected');
-          document.getElementById('character').textContent = this.dataset.animal;
-        });
-      });
-
-      // Math type selection
-      document.querySelectorAll('.math-type-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          document.querySelectorAll('.math-type-btn').forEach(b => b.classList.remove('selected'));
-          this.classList.add('selected');
-          selectedMathType = this.dataset.type;
-          resetGame();
-        });
-      });
-
-      // Difficulty selection
-      document.querySelectorAll('.difficulty-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('selected'));
-          this.classList.add('selected');
-          selectedDifficulty = this.dataset.difficulty;
-          resetGame();
-        });
-      });
-
-      // Select defaults
-      document.querySelector('.animal-option').classList.add('selected');
-      document.querySelector('.math-type-btn').classList.add('selected');
-      document.querySelector('.difficulty-btn').classList.add('selected');
+    function generateNumber(max) {
+      return Math.floor(Math.random() * max) + 1;
     }
-    
+
+    function getRandomMathType() {
+      const types = Array.from(gameState.mathTypes);
+      return types[Math.floor(Math.random() * types.length)];
+    }
+
     function generateProblem() {
-      const settings = difficultySettings[selectedDifficulty];
-      const maxNum = Math.min(settings.maxNumber, settings.maxNumber * level / totalLevels);
-      
-      let num1, num2;
-      
-      switch(selectedMathType) {
-        case '+':
-          num1 = Math.floor(Math.random() * maxNum) + 1;
-          num2 = Math.floor(Math.random() * maxNum) + 1;
-          correctAnswer = num1 + num2;
-          break;
-        case '-':
-          num2 = Math.floor(Math.random() * maxNum) + 1;
-          correctAnswer = Math.floor(Math.random() * maxNum) + 1;
-          num1 = correctAnswer + num2;
-          break;
-        case '×':
-          num1 = Math.floor(Math.random() * Math.sqrt(maxNum)) + 1;
-          num2 = Math.floor(Math.random() * Math.sqrt(maxNum)) + 1;
-          correctAnswer = num1 * num2;
-          break;
-        case '÷':
-          num2 = Math.floor(Math.random() * Math.sqrt(maxNum)) + 1;
-          correctAnswer = Math.floor(Math.random() * Math.sqrt(maxNum)) + 1;
-          num1 = num2 * correctAnswer;
-          break;
-      }
-      
-      document.getElementById('problem').textContent = `${num1} ${selectedMathType} ${num2} = ?`;
-      
-      const options = [correctAnswer];
-      while (options.length < 4) {
-        let wrong;
-        switch(selectedMathType) {
-          case '+':
-          case '-':
-            wrong = correctAnswer + Math.floor(Math.random() * 5) - 2;
-            break;
-          case '×':
-            wrong = correctAnswer + (Math.floor(Math.random() * 5) - 2) * num2;
-            break;
-          case '÷':
-            wrong = correctAnswer + Math.floor(Math.random() * 3) - 1;
-            break;
+      try {
+        if (gameState.mathTypes.size === 0) {
+          document.getElementById('problem').textContent = 'Please select at least one math type';
+          document.getElementById('options').innerHTML = '';
+          return;
         }
-        if (!options.includes(wrong) && wrong > 0) options.push(wrong);
+
+        const maxNum = Math.min(
+          gameState.difficulties[gameState.difficulty].maxNum,
+          gameState.difficulties[gameState.difficulty].maxNum * (gameState.level / gameState.maxLevels)
+        );
+        
+        const type = getRandomMathType();
+        let num1, num2, answer;
+
+        if (type === '+') {
+          num1 = generateNumber(maxNum);
+          num2 = generateNumber(maxNum);
+          answer = num1 + num2;
+        } else if (type === '-') {
+          answer = generateNumber(maxNum);
+          num2 = generateNumber(maxNum);
+          num1 = answer + num2;
+        } else if (type === '×') {
+          num1 = generateNumber(Math.sqrt(maxNum));
+          num2 = generateNumber(Math.sqrt(maxNum));
+          answer = num1 * num2;
+        } else if (type === '÷') {
+          num2 = generateNumber(Math.sqrt(maxNum));
+          answer = generateNumber(Math.sqrt(maxNum));
+          num1 = num2 * answer;
+        }
+
+        gameState.currentAnswer = answer;
+        document.getElementById('problem').textContent = `${num1} ${type} ${num2} = ?`;
+        generateOptions(answer, type, num2);
+      } catch (error) {
+        console.error('Error generating problem:', error);
+        resetGame();
       }
-      
-      options.sort(() => Math.random() - 0.5);
-      
-      const optionsContainer = document.getElementById('options');
-      optionsContainer.innerHTML = '';
-      options.forEach(option => {
-        const button = document.createElement('button');
-        button.className = 'bg-yellow-300 rounded-lg p-4 text-xl font-bold hover:bg-yellow-400 transition-colors';
-        button.textContent = option;
-        button.onclick = () => checkAnswer(option);
-        optionsContainer.appendChild(button);
-      });
+    }
+
+    function generateOptions(answer, type, num2) {
+      const options = new Set([answer]);
+      const maxAttempts = 20;
+      let attempts = 0;
+
+      while (options.size < 4 && attempts < maxAttempts) {
+        let wrong;
+        if (type === '+' || type === '-') {
+          wrong = answer + (Math.floor(Math.random() * 5) - 2);
+        } else if (type === '×') {
+          wrong = answer + (Math.floor(Math.random() * 3) - 1) * num2;
+        } else if (type === '÷') {
+          wrong = answer + Math.floor(Math.random() * 3) - 1;
+        }
+        
+        if (wrong > 0) options.add(wrong);
+        attempts++;
+      }
+
+      const optionsArray = Array.from(options);
+      while (optionsArray.length < 4) {
+        optionsArray.push(answer + optionsArray.length);
+      }
+
+      document.getElementById('options').innerHTML = optionsArray
+        .sort(() => Math.random() - 0.5)
+        .map(opt => `
+          <button onclick="checkAnswer(${opt})" 
+                  class="bg-yellow-100 hover:bg-yellow-200 rounded-lg p-4 text-xl font-bold transition-colors">
+            ${opt}
+          </button>
+        `).join('');
     }
 
     function checkAnswer(answer) {
-      const buttons = document.getElementById('options').children;
-      
-      if (answer === correctAnswer) {
-        score++;
-        document.getElementById('score').textContent = score;
+      if (answer === gameState.currentAnswer) {
+        gameState.score++;
+        document.getElementById('score').textContent = gameState.score;
         
         const stone = document.createElement('div');
-        stone.className = 'w-8 h-8 rounded-full bg-yellow-400 shadow-lg stone-glow';
+        stone.className = 'w-6 h-6 rounded-full bg-yellow-400 shadow-lg stone-glow';
         document.getElementById('stones').appendChild(stone);
-        
+
         const character = document.getElementById('character');
-        const progress = (score / (totalLevels * difficultySettings[selectedDifficulty].questionsPerLevel)) * 100;
+        const progress = (gameState.score / (gameState.maxLevels * gameState.difficulties[gameState.difficulty].problems)) * 100;
         character.style.left = `${Math.min(progress, 100)}%`;
         character.classList.add('hopping');
         setTimeout(() => character.classList.remove('hopping'), 500);
-        
-        if (score % difficultySettings[selectedDifficulty].questionsPerLevel === 0) {
-          level = Math.min(level + 1, totalLevels);
-          document.getElementById('level').textContent = level;
+
+        if (gameState.score % gameState.difficulties[gameState.difficulty].problems === 0) {
+          levelUp();
+        }
+
+        if (gameState.score >= gameState.maxLevels * gameState.difficulties[gameState.difficulty].problems) {
+          document.getElementById('victory').classList.remove('hidden');
           confetti({
             particleCount: 100,
             spread: 70,
             origin: { y: 0.6 }
           });
-        }
-        
-        if (score >= totalLevels * difficultySettings[selectedDifficulty].questionsPerLevel) {
-          document.getElementById('victory').classList.remove('hidden');
-          confetti({
-            particleCount: 200,
-            spread: 160,
-            origin: { y: 0.6 }
-          });
           return;
         }
-        
+
         generateProblem();
       } else {
-        Array.from(buttons).forEach(button => {
-          if (parseInt(button.textContent) === answer) {
-            button.classList.add('animate-pulse', 'bg-red-300');
-            setTimeout(() => {
-              button.classList.remove('animate-pulse', 'bg-red-300');
-            }, 1000);
+        const buttons = document.getElementById('options').children;
+        for (let btn of buttons) {
+          if (parseInt(btn.textContent) === answer) {
+            btn.classList.add('bg-red-200');
+            setTimeout(() => btn.classList.remove('bg-red-200'), 500);
           }
-        });
+        }
       }
     }
 
+    function levelUp() {
+      gameState.level = Math.min(gameState.level + 1, gameState.maxLevels);
+      document.getElementById('level').textContent = gameState.level;
+      confetti({
+        particleCount: 50,
+        spread: 45,
+        origin: { y: 0.6 }
+      });
+    }
+
     function resetGame() {
-      score = 0;
-      level = 1;
+      gameState.score = 0;
+      gameState.level = 1;
       document.getElementById('score').textContent = '0';
       document.getElementById('level').textContent = '1';
       document.getElementById('stones').innerHTML = '';
@@ -316,8 +268,51 @@
       generateProblem();
     }
 
+    // Event Listeners
+    document.querySelectorAll('.animal').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.animal').forEach(b => b.classList.remove('bg-green-300'));
+        btn.classList.add('bg-green-300');
+        gameState.character = btn.dataset.animal;
+        document.getElementById('character').textContent = gameState.character;
+      });
+    });
+
+    document.querySelectorAll('.math-type').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const type = btn.dataset.type;
+        if (gameState.mathTypes.has(type)) {
+          if (gameState.mathTypes.size > 1) {
+            gameState.mathTypes.delete(type);
+            btn.classList.remove('bg-green-300');
+          }
+        } else {
+          gameState.mathTypes.add(type);
+          btn.classList.add('bg-green-300');
+        }
+        generateProblem();
+      });
+    });
+
+    document.querySelectorAll('.difficulty').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.difficulty').forEach(b => b.classList.remove('bg-green-300'));
+        btn.classList.add('bg-green-300');
+        gameState.difficulty = btn.dataset.level;
+        resetGame();
+      });
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', resetGame);
+
     // Initialize game
-    initializeGame();
+    document.querySelector('.animal').classList.add('bg-green-300');
+    document.querySelectorAll('.math-type').forEach(btn => {
+      if (['+', '-'].includes(btn.dataset.type)) {
+        btn.classList.add('bg-green-300');
+      }
+    });
+    document.querySelector('.difficulty').classList.add('bg-green-300');
     generateProblem();
   </script>
 </body>
