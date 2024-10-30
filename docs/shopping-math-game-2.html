@@ -97,7 +97,7 @@
         setTimeout(() => event.target.classList.remove("animate-bounce"), 500);
 
         // Check if user has won
-        if (basketTotal >= targetTotal) {
+        if (basketTotal == targetTotal) {
           displayVictoryMessage();
         }
       }
