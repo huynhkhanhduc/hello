@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    @keyframes hop {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    .character {
+      transition: left 0.5s ease;
+    }
+    
+    .character.hopping {
+      animation: hop 0.5s ease;
+    }
+
+    .stone-glow {
+      animation: glow 2s infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 5px #ffd700; }
+      50% { box-shadow: 0 0 20px #ffd700; }
+    }
+
+    .progress-path {
+      background: repeating-linear-gradient(
+        90deg,
+        #4a5568,
+        #4a5568 10px,
+        #718096 10px,
+        #718096 20px
+      );
+    }
+
+    .animal-option {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .animal-option:hover {
+      transform: scale(1.1);
+    }
+
+    .animal-option.selected {
+      background-color: #4ade80;
+      transform: scale(1.1);
+    }
+
+    .math-type-btn.selected {
+      background-color: #4ade80;
+    }
+
+    .difficulty-btn.selected {
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body class="bg-green-50 min-h-screen p-4">
+  <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold text-green-800 mb-4">Magic Forest Adventure</h1>
+      
+      <!-- Animal Selection -->
+      <div class="mb-6">
+        <h2 class="text-lg text-green-600 mb-2">Choose your animal:</h2>
+        <div class="flex justify-center gap-4 flex-wrap">
+          <div class="animal-option text-4xl p-3 rounded-lg bg-green-100" data-animal="🐨">🐨</div>
+          <div class="animal-option text-4xl p-3 rounded-lg bg-green-100" data-animal="🦉">🦉</div>
+          <div class="animal-option text-4xl p-3 rounded-lg bg-green-100" data-animal="🦒">🦒</div>
+          <div class="animal-option text-4xl p-3 rounded-lg bg-green-100" data-animal="🐘">🐘</div>
+          <div class="animal-option text-4xl p-3 rounded-lg bg-green-100" data-animal="🦁">🦁</div>
+          <div class="animal-option text-4xl p-3 rounded-lg bg-green-100" data-animal="🐸">🐸</div>
+          <div class="animal-option text-4xl p-3 rounded-lg bg-green-100" data-animal="🦊">🦊</div>
+          <div class="animal-option text-4xl p-3 rounded-lg bg-green-100" data-animal="🐼">🐼</div>
+        </div>
+      </div>
+
+      <!-- Math Type Selection -->
+      <div class="mb-6">
+        <h2 class="text-lg text-green-600 mb-2">Choose math type:</h2>
+        <div class="flex justify-center gap-4 flex-wrap">
+          <button class="math-type-btn px-4 py-2 rounded-lg bg-yellow-300 hover:bg-yellow-400" data-type="+">Addition</button>
+          <button class="math-type-btn px-4 py-2 rounded-lg bg-blue-300 hover:bg-blue-400" data-type="-">Subtraction</button>
+          <button class="math-type-btn px-4 py-2 rounded-lg bg-purple-300 hover:bg-purple-400" data-type="×">Multiplication</button>
+          <button class="math-type-btn px-4 py-2 rounded-lg bg-pink-300 hover:bg-pink-400" data-type="÷">Division</button>
+        </div>
+      </div>
+
+      <!-- Difficulty Selection -->
+      <div class="mb-6">
+        <h2 class="text-lg text-green-600 mb-2">Choose difficulty:</h2>
+        <div class="flex justify-center gap-4 flex-wrap">
+          <button class="difficulty-btn px-4 py-2 rounded-lg bg-green-300 hover:bg-green-400" data-difficulty="easy">Easy</button>
+          <button class="difficulty-btn px-4 py-2 rounded-lg bg-yellow-300 hover:bg-yellow-400" data-difficulty="medium">Medium</button>
+          <button class="difficulty-btn px-4 py-2 rounded-lg bg-orange-300 hover:bg-orange-400" data-difficulty="hard">Hard</button>
+          <button class="difficulty-btn px-4 py-2 rounded-lg bg-red-300 hover:bg-red-400" data-difficulty="very-hard">Very Hard</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="relative h-20 mb-8">
+      <div class="progress-path absolute w-full h-4 rounded-full top-8"></div>
+      <div id="character" class="character absolute text-4xl" style="left: 0; top: 0">🐨</div>
+      <div class="home absolute right-0 text-4xl">🏠</div>
+    </div>
+
+    <!-- Score and Level -->
+    <div class="flex justify-between mb-8">
+      <div class="text-lg font-bold text-green-600">Magic Stones: <span id="score">0</span></div>
+      <div class="text-lg font-bold text-purple-600">Level: <span id="level">1</span></div>
+    </div>
+
+    <!-- Math Problem -->
+    <div class="bg-green-100 rounded-xl p-8 mb-8 text-center">
+      <div id="problem" class="text-3xl font-bold text-green-800 mb-6"></div>
+      <div id="options" class="grid grid-cols-2 gap-4">
+      </div>
+    </div>
+
+    <!-- Magic Stones Collection -->
+    <div id="stones" class="flex flex-wrap gap-2">
+    </div>
+
+    <!-- Victory Screen -->
+    <div id="victory" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      <div class="bg-white rounded-xl p-8 text-center">
+        <h2 class="text-3xl font-extrabold text-green-800 mb-4">🎉 Congratulations! 🎉</h2>
+        <p class="text-xl mb-6">You made it home!</p>
+        <button onclick="resetGame()" class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+          Play Again
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let score = 0;
+    let level = 1;
+    let correctAnswer = 0;
+    let selectedMathType = '+';
+    let selectedDifficulty = 'easy';
+    const totalLevels = 5;
+    const questionsPerLevel = 5;
+    
+    const difficultySettings = {
+      'easy': { maxNumber: 10, questionsPerLevel: 5 },
+      'medium': { maxNumber: 20, questionsPerLevel: 7 },
+      'hard': { maxNumber: 50, questionsPerLevel: 10 },
+      'very-hard': { maxNumber: 100, questionsPerLevel: 12 }
+    };
+
+    function initializeGame() {
+      // Animal selection
+      document.querySelectorAll('.animal-option').forEach(option => {
+        option.addEventListener('click', function() {
+          document.querySelectorAll('.animal-option').forEach(opt => opt.classList.remove('selected'));
+          this.classList.add('selected');
+          document.getElementById('character').textContent = this.dataset.animal;
+        });
+      });
+
+      // Math type selection
+      document.querySelectorAll('.math-type-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.math-type-btn').forEach(b => b.classList.remove('selected'));
+          this.classList.add('selected');
+          selectedMathType = this.dataset.type;
+          resetGame();
+        });
+      });
+
+      // Difficulty selection
+      document.querySelectorAll('.difficulty-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('selected'));
+          this.classList.add('selected');
+          selectedDifficulty = this.dataset.difficulty;
+          resetGame();
+        });
+      });
+
+      // Select defaults
+      document.querySelector('.animal-option').classList.add('selected');
+      document.querySelector('.math-type-btn').classList.add('selected');
+      document.querySelector('.difficulty-btn').classList.add('selected');
+    }
+    
+    function generateProblem() {
+      const settings = difficultySettings[selectedDifficulty];
+      const maxNum = Math.min(settings.maxNumber, settings.maxNumber * level / totalLevels);
+      
+      let num1, num2;
+      
+      switch(selectedMathType) {
+        case '+':
+          num1 = Math.floor(Math.random() * maxNum) + 1;
+          num2 = Math.floor(Math.random() * maxNum) + 1;
+          correctAnswer = num1 + num2;
+          break;
+        case '-':
+          num2 = Math.floor(Math.random() * maxNum) + 1;
+          correctAnswer = Math.floor(Math.random() * maxNum) + 1;
+          num1 = correctAnswer + num2;
+          break;
+        case '×':
+          num1 = Math.floor(Math.random() * Math.sqrt(maxNum)) + 1;
+          num2 = Math.floor(Math.random() * Math.sqrt(maxNum)) + 1;
+          correctAnswer = num1 * num2;
+          break;
+        case '÷':
+          num2 = Math.floor(Math.random() * Math.sqrt(maxNum)) + 1;
+          correctAnswer = Math.floor(Math.random() * Math.sqrt(maxNum)) + 1;
+          num1 = num2 * correctAnswer;
+          break;
+      }
+      
+      document.getElementById('problem').textContent = `${num1} ${selectedMathType} ${num2} = ?`;
+      
+      const options = [correctAnswer];
+      while (options.length < 4) {
+        let wrong;
+        switch(selectedMathType) {
+          case '+':
+          case '-':
+            wrong = correctAnswer + Math.floor(Math.random() * 5) - 2;
+            break;
+          case '×':
+            wrong = correctAnswer + (Math.floor(Math.random() * 5) - 2) * num2;
+            break;
+          case '÷':
+            wrong = correctAnswer + Math.floor(Math.random() * 3) - 1;
+            break;
+        }
+        if (!options.includes(wrong) && wrong > 0) options.push(wrong);
+      }
+      
+      options.sort(() => Math.random() - 0.5);
+      
+      const optionsContainer = document.getElementById('options');
+      optionsContainer.innerHTML = '';
+      options.forEach(option => {
+        const button = document.createElement('button');
+        button.className = 'bg-yellow-300 rounded-lg p-4 text-xl font-bold hover:bg-yellow-400 transition-colors';
+        button.textContent = option;
+        button.onclick = () => checkAnswer(option);
+        optionsContainer.appendChild(button);
+      });
+    }
+
+    function checkAnswer(answer) {
+      const buttons = document.getElementById('options').children;
+      
+      if (answer === correctAnswer) {
+        score++;
+        document.getElementById('score').textContent = score;
+        
+        const stone = document.createElement('div');
+        stone.className = 'w-8 h-8 rounded-full bg-yellow-400 shadow-lg stone-glow';
+        document.getElementById('stones').appendChild(stone);
+        
+        const character = document.getElementById('character');
+        const progress = (score / (totalLevels * difficultySettings[selectedDifficulty].questionsPerLevel)) * 100;
+        character.style.left = `${Math.min(progress, 100)}%`;
+        character.classList.add('hopping');
+        setTimeout(() => character.classList.remove('hopping'), 500);
+        
+        if (score % difficultySettings[selectedDifficulty].questionsPerLevel === 0) {
+          level = Math.min(level + 1, totalLevels);
+          document.getElementById('level').textContent = level;
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+        }
+        
+        if (score >= totalLevels * difficultySettings[selectedDifficulty].questionsPerLevel) {
+          document.getElementById('victory').classList.remove('hidden');
+          confetti({
+            particleCount: 200,
+            spread: 160,
+            origin: { y: 0.6 }
+          });
+          return;
+        }
+        
+        generateProblem();
+      } else {
+        Array.from(buttons).forEach(button => {
+          if (parseInt(button.textContent) === answer) {
+            button.classList.add('animate-pulse', 'bg-red-300');
+            setTimeout(() => {
+              button.classList.remove('animate-pulse', 'bg-red-300');
+            }, 1000);
+          }
+        });
+      }
+    }
+
+    function resetGame() {
+      score = 0;
+      level = 1;
+      document.getElementById('score').textContent = '0';
+      document.getElementById('level').textContent = '1';
+      document.getElementById('stones').innerHTML = '';
+      document.getElementById('character').style.left = '0';
+      document.getElementById('victory').classList.add('hidden');
+      generateProblem();
+    }
+
+    // Initialize game
+    initializeGame();
+    generateProblem();
+  </script>
+</body>
+</html>
