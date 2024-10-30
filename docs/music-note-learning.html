@@ -89,6 +89,51 @@
         width: 100%!important;
         margin: 20px 0;
     }
+    .piano-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 1rem;
+}
+
+@media (max-width: 640px) {
+    .piano-key {
+        min-width: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .piano-container {
+        padding: 0.5rem;
+    }
+    
+    .piano-key .label {
+        font-size: 0.7rem;
+    }
+}
+
+/* Add smooth animations */
+.piano-key {
+    transition: all 0.1s ease-in-out;
+}
+
+.piano-key:active,
+.piano-key.active {
+    transform: translateY(2px);
+}
+
+/* For white keys */
+.piano-key.white {
+    background: linear-gradient(to bottom, #ffffff 0%, #f5f5f5 100%);
+}
+
+/* For black keys */
+.piano-key.black {
+    background: linear-gradient(to bottom, #333333 0%, #000000 100%);
+}
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -266,29 +311,99 @@
             document.getElementById('earRecord').textContent = state.records.ear;
         }
 
-        // Create piano keyboard
         function createPiano() {
-            const piano = document.getElementById('piano');
-            piano.innerHTML = '';
+    const piano = document.getElementById('piano');
+    piano.innerHTML = '';
 
-            notes.forEach((note, i) => {
-                const whiteKey = document.createElement('div');
-                whiteKey.className = 'piano-key absolute w-16 h-full bg-white border border-gray-300 rounded-b';
-                whiteKey.style.left = `${i * 64}px`;
-                whiteKey.dataset.note = note;
-                whiteKey.onclick = () => playNote(note);
-                piano.appendChild(whiteKey);
+    // Add responsive styling
+    piano.style.position = 'relative';
+    piano.style.width = '100%';
+    piano.style.maxWidth = '800px'; // Maximum width for larger screens
+    piano.style.margin = '0 auto';
+    piano.style.height = '200px';
+    piano.style.minHeight = '120px';
 
-                if (i < notes.length - 1 && !note.includes('E') && !note.includes('B')) {
-                    const blackKey = document.createElement('div');
-                    blackKey.className = 'piano-key absolute w-8 h-3/5 bg-gray-800 rounded-b z-10';
-                    blackKey.style.left = `${i * 64 + 44}px`;
-                    blackKey.dataset.note = blackKeys[Math.floor(i/2)];
-                    blackKey.onclick = () => playNote(blackKeys[Math.floor(i/2)]);
-                    piano.appendChild(blackKey);
-                }
-            });
+    // Calculate key sizes based on container width
+    const containerWidth = piano.clientWidth;
+    const numWhiteKeys = notes.length;
+    const whiteKeyWidth = Math.min(Math.max(containerWidth / numWhiteKeys, 40), 64); // min 40px, max 64px
+    const blackKeyWidth = whiteKeyWidth * 0.6;
+
+    notes.forEach((note, i) => {
+        // Create white key
+        const whiteKey = document.createElement('div');
+        whiteKey.className = 'piano-key absolute bg-white border border-gray-300 rounded-b cursor-pointer hover:bg-gray-50 active:bg-green-200 transition-colors';
+        whiteKey.style.width = `${whiteKeyWidth}px`;
+        whiteKey.style.height = '100%';
+        whiteKey.style.left = `${i * whiteKeyWidth}px`;
+        whiteKey.dataset.note = note;
+        whiteKey.onclick = () => playNote(note);
+
+        // Add note label at bottom of key (optional)
+        const label = document.createElement('div');
+        label.className = 'absolute bottom-2 left-0 right-0 text-center text-sm text-gray-500';
+        label.textContent = note.replace('4', '').replace('5', '');
+        whiteKey.appendChild(label);
+
+        piano.appendChild(whiteKey);
+
+        // Create black keys (except after E and B)
+        if (i < notes.length - 1 && !note.includes('E') && !note.includes('B')) {
+            const blackKey = document.createElement('div');
+            blackKey.className = 'piano-key absolute bg-gray-800 rounded-b cursor-pointer hover:bg-gray-700 active:bg-gray-600 transition-colors z-10';
+            blackKey.style.width = `${blackKeyWidth}px`;
+            blackKey.style.height = '60%';
+            blackKey.style.left = `${(i * whiteKeyWidth) + (whiteKeyWidth - blackKeyWidth/2)}px`;
+            blackKey.dataset.note = blackKeys[Math.floor(i/2)];
+            blackKey.onclick = () => playNote(blackKeys[Math.floor(i/2)]);
+
+            // Add label for black keys (optional)
+            const blackLabel = document.createElement('div');
+            blackLabel.className = 'absolute bottom-2 left-0 right-0 text-center text-xs text-white opacity-75';
+            blackLabel.textContent = blackKeys[Math.floor(i/2)].replace('4', '');
+            blackKey.appendChild(blackLabel);
+
+            piano.appendChild(blackKey);
         }
+    });
+
+    // Add touch support
+    addTouchSupport();
+}
+
+// Add touch support for mobile devices
+function addTouchSupport() {
+    const keys = document.querySelectorAll('.piano-key');
+    keys.forEach(key => {
+        key.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            playNote(key.dataset.note);
+        });
+        
+        key.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            key.classList.remove('active');
+        });
+    });
+}
+
+// Add window resize handler
+window.addEventListener('resize', debounce(() => {
+    createPiano();
+}, 250));
+
+// Debounce function to prevent too many resize events
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
 
         // Staff functions
         function initializeStaff() {
