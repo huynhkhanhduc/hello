@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   
+    <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Learn Music Notes - Interactive Piano App</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Learn to read and play music notes with this interactive web app. Identify notes on a staff and play them on a virtual piano keyboard. Perfect for beginners and aspiring musicians!">
+    <meta name="keywords" content="music notes, learn music, piano learning app, interactive piano, note identification, music education">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Tags for Social Media -->
+    <meta property="og:title" content="Learn Music Notes - Interactive Piano App">
+    <meta property="og:description" content="An interactive web app to help you learn and play music notes. Identify notes on a staff and play them on a virtual piano. Ideal for beginners!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://duchuynh.online/music-note-learning">
+    <!-- <meta property="og:image" content=""> -->
+    
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Learn Music Notes - Interactive Piano App">
+    <meta name="twitter:description" content="Learn to read and play music notes with this interactive piano app. Ideal for beginners!">
+    <!-- <meta name="twitter:image" content="https://duchuynh.online/images/preview.png"> -->
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://duchuynh.online/music-note-learning">
+
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vexflow@4.2.3/build/cjs/vexflow.js"></script>
+    <script src="https://unpkg.com/tone@14.7.77/build/Tone.js"></script>
+    <style>
+        @keyframes pulse-key {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(0.98); }
+        }
+        
+        @keyframes highlight {
+            0% { background-color: #4ade80; }
+            100% { background-color: #fff; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .piano-key {
+            transition: all 0.1s ease-in-out;
+        }
+
+        .piano-key:hover {
+            background-color: #e5e7eb;
+        }
+
+        .piano-key.active {
+            animation: pulse-key 0.2s ease-in-out;
+            background-color: #4ade80;
+        }
+
+        .correct-animation {
+            animation: highlight 0.5s ease-out;
+        }
+
+        .wrong-animation {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .practice-card {
+            transition: all 0.3s ease;
+        }
+
+        .practice-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .staff-container {
+            transition: opacity 0.3s ease;
+        }
+
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+        .staff-container {
+        min-height: 200px;
+        width: 100%!important;
+        margin: 20px 0;
+    }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold text-gray-900">Music Theory Master</h1>
+                <div class="flex items-center gap-4">
+                    <span class="text-lg font-semibold">Score: <span id="score" class="text-green-600">0</span></span>
+                    <button id="settingsBtn" class="p-2 rounded-lg hover:bg-gray-100">⚙️</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Practice Mode Selection -->
+        <div id="practiceSelection" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="practice-card bg-white rounded-xl shadow-lg p-6 cursor-pointer" onclick="startPractice('identify')">
+                <h3 class="text-xl font-bold mb-2">Note Identification</h3>
+                <p class="text-gray-600">Learn to identify notes on the staff</p>
+                <div class="mt-4 text-sm text-gray-500">Best Record: <span id="identifyRecord">0</span></div>
+            </div>
+            <div class="practice-card bg-white rounded-xl shadow-lg p-6 cursor-pointer" onclick="startPractice('play')">
+                <h3 class="text-xl font-bold mb-2">Play Notes</h3>
+                <p class="text-gray-600">Practice playing note sequences</p>
+                <div class="mt-4 text-sm text-gray-500">Best Record: <span id="playRecord">0</span></div>
+            </div>
+            <div class="practice-card bg-white rounded-xl shadow-lg p-6 cursor-pointer" onclick="startPractice('ear')">
+                <h3 class="text-xl font-bold mb-2">Ear Training</h3>
+                <p class="text-gray-600">Train your musical ear</p>
+                <div class="mt-4 text-sm text-gray-500">Best Record: <span id="earRecord">0</span></div>
+            </div>
+        </div>
+
+        <!-- Practice Area -->
+        <div id="practiceArea" class="hidden">
+            <!-- Staff Area -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <div id="staff" class="staff-container h-48"></div>
+            </div>
+
+            <!-- Feedback Area -->
+            <div id="feedback" class="text-center text-xl font-semibold text-gray-700 mb-6"></div>
+
+            <!-- Piano Keys -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div id="piano" class="relative h-48 flex justify-center"></div>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex justify-between mt-6">
+                <button onclick="backToPracticeSelection()" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+                    Back
+                </button>
+                <button id="nextButton" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+                    Next Note
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Practice Complete Modal -->
+    <div id="practiceCompleteModal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
+            <h2 class="text-2xl font-bold mb-4">Practice Complete! 🎉</h2>
+            <p class="text-lg mb-4">Your score: <span id="finalScore">0</span></p>
+            <p class="text-lg mb-6">Best score: <span id="bestScore">0</span></p>
+            <div class="flex justify-end gap-4">
+                <button onclick="backToPracticeSelection()" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+                    Exit
+                </button>
+                <button onclick="restartPractice()" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+                    Practice Again
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        const state = {
+            mode: null,
+            score: 0,
+            currentNote: null,
+            sequence: [],
+            sequenceIndex: 0,
+            questionCount: 0,
+            maxQuestions: 10,
+            records: {
+                identify: 0,
+                play: 0,
+                ear: 0
+            }
+        };
+
+        // Notes configuration
+        const notes = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5'];
+        const blackKeys = ['C#4', 'D#4', 'F#4', 'G#4', 'A#4'];
+
+        // Update notes configuration to use lowercase
+        // const notes = ['c/4', 'd/4', 'e/4', 'f/4', 'g/4', 'a/4', 'b/4', 'c/5'];
+        // const blackKeys = ['c#/4', 'd#/4', 'f#/4', 'g#/4', 'a#/4'];
+
+        // Update drawNote function
+        function drawNote(noteName) {
+            const { context, stave } = initializeStaff();
+            // Convert note format for VexFlow (e.g., "c/4" format)
+            const vfNote = noteName.toLowerCase().replace(/(\d)/, '/$1');
+            
+            // Create and draw the note
+            const note = new VF.StaveNote({ 
+                clef: "treble", 
+                keys: [vfNote], 
+                duration: "q" 
+            }).setStyle({fillStyle: "black"});
+            
+            // Create voice and formatter
+            const voice = new VF.Voice({num_beats: 1, beat_value: 4});
+            voice.addTickables([note]);
+            
+            // Format and draw
+            new VF.Formatter()
+                .joinVoices([voice])
+                .format([voice], stave.getWidth() - 50);
+            
+            stave.setContext(context).draw();
+            voice.draw(context, stave);
+            
+            state.currentNote = noteName;
+        }
+
+        // Update drawSequence function
+        function drawSequence() {
+            const { context, stave } = initializeStaff();
+            const noteElements = state.sequence.map(noteName => 
+                new VF.StaveNote({ 
+                    clef: "treble", 
+                    keys: [noteName.toLowerCase().replace(/(\d)/, '/$1')], 
+                    duration: "q" 
+                })
+            );
+            const voice = new VF.Voice({ num_beats: state.sequence.length, beat_value: 4 });
+            voice.addTickables(noteElements);
+            new VF.Formatter().joinVoices([voice]).format([voice], 400);
+            voice.draw(context, stave);
+        }
+
+        // Initialize synth
+        const synth = new Tone.Synth().toDestination();
+
+        
+        const VF = Vex.Flow;
+
+        // Load records from localStorage
+        function loadRecords() {
+            const records = localStorage.getItem('musicRecords');
+            if (records) {
+                state.records = JSON.parse(records);
+                updateRecordDisplays();
+            }
+        }
+
+        // Save records to localStorage
+        function saveRecords() {
+            localStorage.setItem('musicRecords', JSON.stringify(state.records));
+            updateRecordDisplays();
+        }
+
+        function updateRecordDisplays() {
+            document.getElementById('identifyRecord').textContent = state.records.identify;
+            document.getElementById('playRecord').textContent = state.records.play;
+            document.getElementById('earRecord').textContent = state.records.ear;
+        }
+
+        // Create piano keyboard
+        function createPiano() {
+            const piano = document.getElementById('piano');
+            piano.innerHTML = '';
+
+            notes.forEach((note, i) => {
+                const whiteKey = document.createElement('div');
+                whiteKey.className = 'piano-key absolute w-16 h-full bg-white border border-gray-300 rounded-b';
+                whiteKey.style.left = `${i * 64}px`;
+                whiteKey.dataset.note = note;
+                whiteKey.onclick = () => playNote(note);
+                piano.appendChild(whiteKey);
+
+                if (i < notes.length - 1 && !note.includes('E') && !note.includes('B')) {
+                    const blackKey = document.createElement('div');
+                    blackKey.className = 'piano-key absolute w-8 h-3/5 bg-gray-800 rounded-b z-10';
+                    blackKey.style.left = `${i * 64 + 44}px`;
+                    blackKey.dataset.note = blackKeys[Math.floor(i/2)];
+                    blackKey.onclick = () => playNote(blackKeys[Math.floor(i/2)]);
+                    piano.appendChild(blackKey);
+                }
+            });
+        }
+
+        // Staff functions
+        function initializeStaff() {
+            const div = document.getElementById('staff');
+            div.innerHTML = '';
+            // Get actual container width
+            const width = div.clientWidth || 500; // fallback to 500 if clientWidth is 0
+            const renderer = new VF.Renderer(div, VF.Renderer.Backends.SVG);
+            renderer.resize(width, 160);
+            const context = renderer.getContext();
+            context.setFont("Arial", 10);
+            
+            // Create stave with proper width
+            const stave = new VF.Stave(10, 40, width - 20);
+            stave.addClef('treble');
+            stave.setContext(context).draw();
+            
+            return { context, stave };
+        }
+
+        // function drawNote(noteName) {
+        //     const { context, stave } = initializeStaff();
+        //     const note = new VF.StaveNote({ clef: "treble", keys: [noteName.toLowerCase()], duration: "q" });
+        //     const voice = new VF.Voice({ num_beats: 1, beat_value: 4 });
+        //     voice.addTickables([note]);
+        //     new VF.Formatter().joinVoices([voice]).format([voice], 250);
+        //     voice.draw(context, stave);
+        //     state.currentNote = noteName;
+        // }
+
+        // Practice mode functions
+        function startPractice(mode) {
+            state.mode = mode;
+            state.score = 0;
+            state.questionCount = 0;
+            document.getElementById('practiceSelection').classList.add('hidden');
+            document.getElementById('practiceArea').classList.remove('hidden');
+            
+            if (mode === 'identify') {
+                generateNewNote();
+            } else if (mode === 'play') {
+                generateSequence();
+            } else if (mode === 'ear') {
+                startEarTraining();
+            }
+        }
+
+        function generateNewNote() {
+            const newNote = notes[Math.floor(Math.random() * notes.length)];
+            drawNote(newNote);
+            updateFeedback('Click the matching piano key');
+        }
+
+        function generateSequence() {
+            state.sequence = [];
+            for (let i = 0; i < 3; i++) {
+                state.sequence.push(notes[Math.floor(Math.random() * notes.length)]);
+            }
+            state.sequenceIndex = 0;
+            drawSequence();
+            updateFeedback('Play the sequence in order');
+        }
+
+        // function drawSequence() {
+        //     const { context, stave } = initializeStaff();
+        //     const noteElements = state.sequence.map(noteName => 
+        //         new VF.StaveNote({ clef: "treble", keys: [noteName.toLowerCase()], duration: "q" })
+        //     );
+        //     const voice = new VF.Voice({ num_beats: state.sequence.length, beat_value: 4 });
+        //     voice.addTickables(noteElements);
+        //     new VF.Formatter().joinVoices([voice]).format([voice], 400);
+        //     voice.draw(context, stave);
+        // }
+
+        function startEarTraining() {
+            state.currentNote = notes[Math.floor(Math.random() * notes.length)];
+            setTimeout(() => {
+                synth.triggerAttackRelease(state.currentNote, '4n');
+            }, 500);
+            updateFeedback('Listen and click the matching key');
+        }
+
+        // Interaction handlers
+        function playNote(note) {
+            const key = document.querySelector(`[data-note="${note}"]`);
+            key.classList.add('active');
+            synth.triggerAttackRelease(note, '8n');
+            setTimeout(() => key.classList.remove('active'), 200);
+
+            if (state.mode === 'identify') {
+                checkIdentification(note);
+            } else if (state.mode === 'play') {
+                checkSequence(note);
+            } else if (state.mode === 'ear') {
+                checkEarTraining(note);
+            }
+        }
+
+        function checkIdentification(playedNote) {
+            if (playedNote === state.currentNote) {
+                handleCorrectAnswer();
+                setTimeout(generateNewNote, 1000);
+            } else {
+                handleWrongAnswer();
+            }
+        }
+
+        function checkSequence(playedNote) {
+            if (playedNote === state.sequence[state.sequenceIndex]) {
+                state.sequenceIndex++;
+                if (state.sequenceIndex === state.sequence.length) {
+                    handleCorrectAnswer();
+                    setTimeout(generateSequence, 1000);
+                }
+            } else {
+                handleWrongAnswer();
+                state.sequenceIndex = 0;
+            }
+        }
+
+        function checkEarTraining(playedNote) {
+            if (playedNote === state.currentNote) {
+                handleCorrectAnswer();
+                setTimeout(startEarTraining, 1000);
+            } else {
+                handleWrongAnswer();
+            }
+        }
+
+        function handleCorrectAnswer() {
+            state.score++;
+            state.questionCount++;
+            updateFeedback('Correct! 🎉');
+            document.getElementById('score').textContent = state.score;
+            
+            if (state.questionCount >= state.maxQuestions) {
+                completePractice();
+            }
+        }
+
+        function handleWrongAnswer() {
+            updateFeedback('Try again!');
+            const feedback = document.getElementById('feedback');
+            feedback.classList.add('wrong-animation');
+            setTimeout(() => feedback.classList.remove('wrong-animation'), 500);
+        }
+
+        function completePractice() {
+            const modal = document.getElementById('practiceCompleteModal');
+            document.getElementById('finalScore').textContent = state.score;
+            
+            if (state.score > state.records[state.mode]) {
+                state.records[state.mode] = state.score;
+                saveRecords();
+            }
+            
+            document.getElementById('bestScore').textContent = state.records[state.mode];
+            modal.classList.remove('hidden');
+        }
+
+        function backToPracticeSelection() {
+            document.getElementById('practiceArea').classList.add('hidden');
+            document.getElementById('practiceCompleteModal').classList.add('hidden');
+            document.getElementById('practiceSelection').classList.remove('hidden');
+            updateRecordDisplays();
+        }
+
+        function restartPractice() {
+
+            document.getElementById('practiceCompleteModal').classList.add('hidden');
+            startPractice(state.mode);
+        }
+
+        function updateFeedback(message) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = message;
+        }
+
+        // Next button handler
+        document.getElementById('nextButton').addEventListener('click', () => {
+            if (state.mode === 'identify') {
+                generateNewNote();
+            } else if (state.mode === 'play') {
+                generateSequence();
+            } else if (state.mode === 'ear') {
+                startEarTraining();
+            }
+        });
+
+        // Initialize app
+        createPiano();
+        initializeStaff();
+        loadRecords();
+    </script>
+</body>
+</html>
