@@ -1,0 +1,13 @@
+/* Bounce Animation for the Basket */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+#basket {
+  animation: bounce 0.5s infinite;
+}

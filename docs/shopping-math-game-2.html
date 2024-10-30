@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Title -->
+  <title>Shopping Math Game for Kids - Fun and Educational Learning</title>
+  
+  <!-- Description -->
+  <meta name="description" content="A fun and interactive shopping math game for kids! Drag coins and bills to reach the target total. Perfect for elementary school math practice. Play, learn, and win!">
+
+  <!-- Keywords -->
+  <meta name="keywords" content="math game, shopping game, kids math game, interactive math, educational game, learning math for kids, elementary math, practice math, fun learning game">
+
+  <!-- Open Graph / Facebook Metadata -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Shopping Math Game for Kids - Fun and Educational">
+  <meta property="og:description" content="Engage kids with this interactive shopping math game! Perfect for young learners to practice math in a fun way.">
+  <meta property="og:image" content="">
+  <meta property="og:url" content="YOUR_SITE_URL">
+
+  <!-- Twitter Metadata -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Shopping Math Game for Kids - Fun and Educational">
+  <meta name="twitter:description" content="Kids can learn math while having fun in this interactive shopping game! Perfect for elementary school students.">
+  <meta name="twitter:image" content="">
+
+  <link href="styles.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-blue-100 flex items-center justify-center h-screen">
+
+  <div class="text-center mb-4">
+    <h1 class="text-2xl font-bold">Shopping Math Game</h1>
+    <p class="text-gray-700">Drag coins and bills into the basket to reach the total!</p>
+    <p id="target" class="text-lg font-bold mt-2">Target: $0</p>
+  </div>
+
+  <div class="grid grid-cols-3 gap-4 w-full max-w-lg px-8">
+    <!-- Coins and Bills -->
+    <div id="items" class="col-span-2 grid grid-cols-3 gap-4">
+      <div class="coin bg-yellow-300 p-2 text-center text-xl font-bold rounded-full cursor-pointer" draggable="true" data-value="1">$1</div>
+      <div class="coin bg-yellow-300 p-2 text-center text-xl font-bold rounded-full cursor-pointer" draggable="true" data-value="5">$5</div>
+      <div class="coin bg-yellow-300 p-2 text-center text-xl font-bold rounded-full cursor-pointer" draggable="true" data-value="10">$10</div>
+      <div class="coin bg-yellow-300 p-2 text-center text-xl font-bold rounded-full cursor-pointer" draggable="true" data-value="20">$20</div>
+    </div>
+
+    <!-- Basket -->
+    <div id="basket" class="p-4 bg-green-200 border-2 border-green-400 rounded-lg flex flex-col items-center justify-center animate-bounce transition-transform" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <span class="text-xl font-bold">Basket</span>
+      <div id="total" class="mt-2 text-2xl font-bold">$0</div>
+    </div>
+  </div>
+
+  <script>
+    // Variables
+    let basketTotal = 0;
+    let targetTotal;
+    const totalDisplay = document.getElementById("total");
+    const targetDisplay = document.getElementById("target");
+
+    // Function to set a new random target and reset total
+    function resetGame() {
+      basketTotal = 0;
+      targetTotal = Math.floor(Math.random() * 71) + 30; // Random target between $30 and $100
+      totalDisplay.textContent = "$0";
+      targetDisplay.textContent = `Target: $${targetTotal}`;
+    }
+
+    // Initial game setup
+    resetGame();
+
+    // Allow drop event
+    function allowDrop(event) {
+      event.preventDefault();
+    }
+
+    // Drag event
+    document.querySelectorAll(".coin").forEach((coin) => {
+      coin.addEventListener("dragstart", (event) => {
+        event.dataTransfer.setData("value", event.target.getAttribute("data-value"));
+      });
+    });
+
+    // Drop event
+    function drop(event) {
+      event.preventDefault();
+      const value = parseInt(event.dataTransfer.getData("value"));
+      if (!isNaN(value)) {
+        // Update basket total
+        basketTotal += value;
+        totalDisplay.textContent = `$${basketTotal}`;
+        
+        // Trigger basket animation
+        event.target.classList.add("animate-bounce");
+        setTimeout(() => event.target.classList.remove("animate-bounce"), 500);
+
+        // Check if user has won
+        if (basketTotal >= targetTotal) {
+          displayVictoryMessage();
+        }
+      }
+    }
+
+    // Display a funny victory message with Play Again button
+    function displayVictoryMessage() {
+      const message = document.createElement("div");
+      message.className = "fixed inset-0 flex flex-col items-center justify-center bg-black bg-opacity-75 text-white text-2xl font-bold p-4 rounded";
+      message.innerHTML = `🎉 Congratulations! You’re a Math Superstar! 🎉<br>Target Reached!<br><button onclick="playAgain()" class="mt-4 px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded">Play Again</button>`;
+      
+      document.body.appendChild(message);
+    }
+
+    // Play Again function to reset game and remove victory message
+    function playAgain() {
+      document.querySelector("div.fixed").remove(); // Remove the victory message
+      resetGame(); // Reset the game
+    }
+  </script>
+</body>
+</html>
