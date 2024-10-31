@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MP7P6JFR8E"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MP7P6JFR8E');
+</script>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NTBJZVBQ');</script>
+<!-- End Google Tag Manager -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>Shopkeeper Challenge - Fun Money Math Learning Game</title>
+    <meta name="title" content="Shopkeeper Challenge - Fun Money Math Learning Game">
+    <meta name="description" content="Interactive math game where kids learn money management, making change, and basic arithmetic through a fun shopping experience. Perfect for elementary school students!">
+    <meta name="keywords" content="math game, money learning, educational game, kids math, making change, counting money, shop game, arithmetic practice, educational tools, math practice">
+    <meta name="author" content="Duc Huynh">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://duchuynh.online/shopkeeper-challenge">
+    <meta property="og:title" content="Shopkeeper Challenge - Learn Money Math Through Play">
+    <meta property="og:description" content="Help kids master money math skills with this interactive shopping game. Practice counting, making change, and basic arithmetic in a fun store setting!">
+    <!-- <meta property="og:image" content="https://duchuynh.online/path-to-game-preview.png"> -->
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://duchuynh.online/shopkeeper-challenge">
+    <meta property="twitter:title" content="Shopkeeper Challenge - Interactive Money Math Game">
+    <meta property="twitter:description" content="Make learning money math fun! Interactive game teaching kids to count money and make change through engaging shopping scenarios.">
+    <!-- <meta property="twitter:image" content="https://duchuynh.online/path-to-game-preview.png"> -->
+    
+    <!-- Additional SEO -->
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    <meta name="theme-color" content="#3B82F6">
+    
+    <!-- Structured Data / Schema.org -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Shopkeeper Challenge",
+        "description": "Educational math game teaching money skills through interactive shopping scenarios",
+        "image": "https://duchuynh.online/path-to-game-preview.png",
+        "url": "https://duchuynh.online/shopkeeper-challenge",
+        "applicationCategory": "EducationalApplication",
+        "genre": "Educational Game",
+        "audience": {
+            "@type": "EducationalAudience",
+            "educationalRole": "student"
+        },
+        "educationalUse": "Interactive Teaching",
+        "educationalAlignment": {
+            "@type": "AlignmentObject",
+            "alignmentType": "teaches",
+            "educationalFramework": "Mathematics",
+            "targetName": "Money and basic arithmetic"
+        },
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        }
+    }
+    </script>
+
+    <!-- App Specific Meta -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Shopkeeper Challenge">
+    <meta name="application-name" content="Shopkeeper Challenge">
+    
+    <!-- Mobile App Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    
+    <!-- Preconnect to External Resources -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://duchuynh.online/shopkeeper-challenge">
+
+    <!-- Additional Meta for Social Sharing -->
+    <meta name="twitter:creator" content="@yourusername">
+    <meta property="og:site_name" content="Educational Math Games">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- PWA Related Meta -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="theme-color" content="#3B82F6">
+    
+    <!-- Accessibility Meta -->
+    <meta name="accessibility" content="WCAG2A">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .coin {
+            transition: all 0.2s ease;
+        }
+
+        .coin:hover {
+            transform: scale(1.1);
+        }
+
+        .coin.selected {
+            animation: wiggle 0.3s ease;
+        }
+
+        .money-container {
+            perspective: 1000px;
+        }
+
+        .money-item {
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+        }
+
+        .money-item:hover {
+            transform: scale(1.05) rotateY(10deg);
+        }
+
+        .progress-bar {
+            transition: width 0.5s ease;
+        }
+
+        .item-display {
+            animation: float 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-blue-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-6">
+            <h1 class="text-3xl font-bold text-center text-blue-800">Shopkeeper Challenge</h1>
+        </div>
+    </header>
+
+    <!-- Main Game Container -->
+    <main class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Progress Bar -->
+        <div class="mb-8">
+            <div class="flex justify-between text-sm font-semibold text-gray-600 mb-2">
+                <span>Level: <span id="currentLevel">1</span></span>
+                <span>Score: <span id="score">0</span></span>
+            </div>
+            <div class="h-4 bg-gray-200 rounded-full overflow-hidden">
+                <div id="progressBar" class="progress-bar h-full bg-blue-500 w-0"></div>
+            </div>
+        </div>
+
+        <!-- Store Counter -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <div class="text-center mb-8">
+                <div id="itemDisplay" class="item-display text-6xl mb-4">🍎</div>
+                <div class="text-2xl font-bold text-green-800">Price: $<span id="itemPrice">0.00</span></div>
+            </div>
+
+            <!-- Payment Display -->
+            <div class="flex justify-between items-center bg-gray-50 rounded-lg p-4 mb-4">
+                <div class="text-xl font-semibold text-gray-700">
+                    Selected: $<span id="currentAmount">0.00</span>
+                </div>
+                <div id="changeNeeded" class="text-xl font-semibold text-orange-600 hidden">
+                    Change needed: $<span id="changeAmount">0.00</span>
+                </div>
+            </div>
+
+            <!-- Selected Money Display -->
+            <div id="selectedMoney" class="flex flex-wrap gap-2 min-h-[60px] border-2 border-dashed border-gray-300 rounded-lg p-4 mb-4"></div>
+        </div>
+
+        <!-- Wallet Section -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Your Wallet</h2>
+            
+            <!-- Bills -->
+            <div class="money-container grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="money-item bg-green-100 rounded-lg p-4 text-center cursor-pointer hover:bg-green-200" data-value="20">
+                    <div class="text-xl font-bold text-green-800">$20</div>
+                </div>
+                <div class="money-item bg-green-100 rounded-lg p-4 text-center cursor-pointer hover:bg-green-200" data-value="10">
+                    <div class="text-xl font-bold text-green-800">$10</div>
+                </div>
+                <div class="money-item bg-green-100 rounded-lg p-4 text-center cursor-pointer hover:bg-green-200" data-value="5">
+                    <div class="text-xl font-bold text-green-800">$5</div>
+                </div>
+                <div class="money-item bg-green-100 rounded-lg p-4 text-center cursor-pointer hover:bg-green-200" data-value="1">
+                    <div class="text-xl font-bold text-green-800">$1</div>
+                </div>
+            </div>
+
+            <!-- Coins -->
+            <div class="money-container grid grid-cols-4 md:grid-cols-6 gap-4">
+                <div class="coin money-item bg-yellow-200 rounded-full p-4 text-center cursor-pointer hover:bg-yellow-300" data-value="0.25">
+                    <div class="text-lg font-bold text-yellow-800">25¢</div>
+                </div>
+                <div class="coin money-item bg-yellow-200 rounded-full p-4 text-center cursor-pointer hover:bg-yellow-300" data-value="0.10">
+                    <div class="text-lg font-bold text-yellow-800">10¢</div>
+                </div>
+                <div class="coin money-item bg-yellow-200 rounded-full p-4 text-center cursor-pointer hover:bg-yellow-300" data-value="0.05">
+                    <div class="text-lg font-bold text-yellow-800">5¢</div>
+                </div>
+                <div class="coin money-item bg-yellow-200 rounded-full p-4 text-center cursor-pointer hover:bg-yellow-300" data-value="0.01">
+                    <div class="text-lg font-bold text-yellow-800">1¢</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Buttons -->
+        <div class="flex justify-center gap-4 mt-6">
+            <button id="checkButton" class="px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 disabled:opacity-50">
+                Check Amount
+            </button>
+            <button id="resetButton" class="px-6 py-3 bg-gray-600 text-white rounded-lg font-semibold hover:bg-gray-700">
+                Reset
+            </button>
+        </div>
+
+        <!-- Success Modal -->
+        <div id="successModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
+                <h2 class="text-2xl font-bold text-green-800 mb-4">Great job! 🎉</h2>
+                <p class="text-lg mb-6">You've completed this transaction!</p>
+                <button onclick="nextLevel()" class="w-full px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700">
+                    Next Level
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const state = {
+            level: 1,
+            score: 0,
+            currentAmount: 0,
+            itemPrice: 0,
+            selectedMoney: [],
+            items: [
+                { emoji: '🍎', name: 'Apple' },
+                { emoji: '🍌', name: 'Banana' },
+                { emoji: '🥕', name: 'Carrot' },
+                { emoji: '🍊', name: 'Orange' },
+                { emoji: '🥪', name: 'Sandwich' },
+                { emoji: '🍕', name: 'Pizza' },
+                { emoji: '🍦', name: 'Ice Cream' },
+                { emoji: '🧃', name: 'Juice' }
+            ]
+        };
+
+        function generatePrice() {
+            const basePrice = Math.random() * (state.level * 2);
+            return Math.round(basePrice * 100) / 100;
+        }
+
+        function updateDisplay() {
+            document.getElementById('currentLevel').textContent = state.level;
+            document.getElementById('score').textContent = state.score;
+            document.getElementById('currentAmount').textContent = state.currentAmount.toFixed(2);
+            document.getElementById('progressBar').style.width = `${((state.level - 1) % 5) * 20}%`;
+        }
+
+        function selectMoney(value) {
+            state.currentAmount += value;
+            state.selectedMoney.push(value);
+            
+            // Create and add money element to display
+            const moneyElement = document.createElement('div');
+            moneyElement.className = `${value >= 1 ? 'bg-green-100' : 'bg-yellow-200'} rounded-lg p-2 text-center animate-pulse`;
+            moneyElement.textContent = `$${value.toFixed(2)}`;
+            document.getElementById('selectedMoney').appendChild(moneyElement);
+            
+            updateDisplay();
+            checkAmount();
+        }
+
+        function checkAmount() {
+            const difference = Math.abs(state.currentAmount - state.itemPrice);
+            if (difference < 0.01) { // Account for floating point precision
+                showSuccess();
+            }
+        }
+
+        function showSuccess() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+
+        function nextLevel() {
+            state.level++;
+            state.score += Math.floor(state.itemPrice * 10);
+            resetGame(true);
+            document.getElementById('successModal').classList.add('hidden');
+        }
+
+        function resetGame(newLevel = false) {
+            state.currentAmount = 0;
+            state.selectedMoney = [];
+            document.getElementById('selectedMoney').innerHTML = '';
+            if (newLevel) {
+                state.itemPrice = generatePrice();
+                const randomItem = state.items[Math.floor(Math.random() * state.items.length)];
+                document.getElementById('itemDisplay').textContent = randomItem.emoji;
+            }
+            document.getElementById('itemPrice').textContent = state.itemPrice.toFixed(2);
+            updateDisplay();
+        }
+
+        // Initialize money click handlers
+        document.querySelectorAll('.money-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const value = parseFloat(item.dataset.value);
+                selectMoney(value);
+                item.classList.add('selected');
+                setTimeout(() => item.classList.remove('selected'), 300);
+            });
+        });
+
+        // Initialize reset button
+        document.getElementById('resetButton').addEventListener('click', () => resetGame());
+
+        // Initial game setup
+        resetGame(true);
+    </script>
+</body>
+</html>
