@@ -190,6 +190,78 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         .progress-bar {
             transition: width 0.5s ease-in-out;
         }
+
+        /* Mobile-specific adjustments */
+    @media screen and (max-width: 428px) { /* iPhone 12 Pro width */
+        .number-button {
+            width: 100% !important;
+            height: 60px !important; /* Smaller height for mobile */
+            font-size: 1.5rem !important; /* Smaller font size */
+        }
+
+        .caterpillar-segment {
+            width: 50px !important; /* Smaller segments */
+            height: 50px !important;
+            font-size: 1rem !important;
+        }
+
+        .caterpillar-head {
+            width: 60px !important;
+            height: 60px !important;
+            font-size: 2rem !important;
+        }
+
+        #caterpillar {
+            gap: 0.5rem !important;
+            padding: 0.5rem !important;
+            min-height: 80px !important;
+        }
+
+        /* Adjust main container padding */
+        main {
+            padding: 1rem !important;
+        }
+
+        /* Adjust text sizes */
+        h1 {
+            font-size: 1.75rem !important;
+        }
+
+        .text-2xl {
+            font-size: 1.25rem !important;
+        }
+
+        /* Adjust button grid */
+        #numberButtons {
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 0.75rem !important;
+        }
+
+        /* Adjust control buttons */
+        .control-button {
+            padding: 0.75rem 1.5rem !important;
+            font-size: 1rem !important;
+        }
+    }
+
+    /* Handle landscape orientation */
+    @media screen and (max-width: 926px) and (orientation: landscape) {
+        main {
+            padding: 0.5rem !important;
+        }
+
+        #caterpillar {
+            min-height: 60px !important;
+        }
+
+        #numberButtons {
+            grid-template-columns: repeat(6, 1fr) !important;
+        }
+
+        .number-button {
+            height: 40px !important;
+        }
+    }
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-green-50 min-h-screen">
@@ -213,7 +285,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
 
     <!-- Main Game Container -->
-    <main class="max-w-6xl mx-auto px-4 py-8">
+    <main class="max-w-4xl mx-auto px-4 py-4 overflow-x-hidden">
         <!-- Level Info -->
         <div class="text-center mb-8 bg-white rounded-xl shadow-lg p-6">
             <div class="text-2xl font-bold text-blue-600 mb-2" id="levelInfo">Level 1: Count by 1s</div>
@@ -244,35 +316,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <!-- Number Buttons -->
         <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
             <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Choose Your Numbers</h2>
-            <div id="numberButtons" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            <div id="numberButtons" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 md:gap-4">
                 <!-- Number buttons will be generated here -->
             </div>
         </div>
 
         <!-- Control Buttons -->
-        <div class="flex justify-center gap-6 mt-8">
-            <button onclick="resetToLevel1()" class="
-                px-8 py-4 
-                bg-gradient-to-r from-red-500 to-red-600 
-                hover:from-red-600 hover:to-red-700
-                text-white text-xl font-bold 
-                rounded-xl
-                shadow-lg hover:shadow-xl
-                transform transition-all duration-300
-                hover:scale-105
-            ">
+        <div class="flex justify-center gap-2 md:gap-6 mt-4">
+            <button onclick="resetToLevel1()" class="control-button px-4 py-2 md:px-8 md:py-4 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm md:text-xl font-bold transition-all">
                 Start Over
             </button>
-            <button onclick="resetLevel()" class="
-                px-8 py-4 
-                bg-gradient-to-r from-yellow-500 to-yellow-600
-                hover:from-yellow-600 hover:to-yellow-700 
-                text-white text-xl font-bold 
-                rounded-xl
-                shadow-lg hover:shadow-xl
-                transform transition-all duration-300
-                hover:scale-105
-            ">
+            <button onclick="resetLevel()" class="control-button px-4 py-2 md:px-8 md:py-4 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg text-sm md:text-xl font-bold transition-all">
                 Reset Level
             </button>
         </div>
@@ -370,33 +424,32 @@ function canMakeSum(numbers, target, used, currentSum) {
     return false;
 }
 
-        function createNumberButtons() {
-            const container = document.getElementById('numberButtons');
-            container.innerHTML = '';
-            
-            const numbersToShow = 6;
-            for (let i = 1; i <= numbersToShow; i++) {
-                const number = i * gameState.skipCount;
-                const button = document.createElement('button');
-                button.className = `
-                    number-button
-                    w-full h-24
-                    text-3xl font-bold
-                    bg-gradient-to-br from-green-300 to-green-400
-                    hover:from-green-400 hover:to-green-500
-                    rounded-2xl
-                    shadow-lg hover:shadow-xl
-                    flex items-center justify-center
-                    transform transition-all duration-300
-                    text-green-800
-                    border-4 border-green-500
-                    animate-pulse-custom
-                `;
-                button.textContent = number;
-                button.onclick = () => addSegment(number);
-                container.appendChild(button);
-            }
-        }
+function createNumberButtons() {
+    const container = document.getElementById('numberButtons');
+    container.innerHTML = '';
+    
+    const numbersToShow = 6;
+    for (let i = 1; i <= numbersToShow; i++) {
+        const number = i * gameState.skipCount;
+        const button = document.createElement('button');
+        button.className = `
+            number-button
+            w-full h-full
+            text-xl md:text-3xl font-bold
+            bg-gradient-to-br from-green-300 to-green-400
+            hover:from-green-400 hover:to-green-500
+            rounded-lg md:rounded-2xl
+            shadow-md hover:shadow-lg
+            flex items-center justify-center
+            transform transition-all duration-300
+            text-green-800
+            border-2 md:border-4 border-green-500
+        `;
+        button.textContent = number;
+        button.onclick = () => addSegment(number);
+        container.appendChild(button);
+    }
+}
 
         function addSegment(number) {
             if (gameState.currentSum + number <= gameState.targetNumber) {
