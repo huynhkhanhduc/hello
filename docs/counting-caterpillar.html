@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MP7P6JFR8E"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MP7P6JFR8E');
+</script>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NTBJZVBQ');</script>
+<!-- End Google Tag Manager -->
+   <!-- Primary Meta Tags -->
+   <title>Counting Caterpillar - Fun Math Learning Game</title>
+   <meta name="title" content="Counting Caterpillar - Fun Math Learning Game">
+   <meta name="description" content="Help the caterpillar grow while learning skip counting! An interactive math game for kids to practice counting by 1s, 2s, 5s, and more.">
+   <meta name="keywords" content="math game, skip counting, educational game, kids math, number sequence, counting practice, math learning, elementary math, caterpillar game">
+   <meta name="author" content="Duc Huynh">
+   
+   <!-- Open Graph / Facebook -->
+   <meta property="og:type" content="website">
+   <meta property="og:url" content="https://duchuynh.online/counting-caterpillar">
+   <meta property="og:title" content="Counting Caterpillar - Interactive Math Learning">
+   <meta property="og:description" content="Make learning skip counting fun! Join our friendly caterpillar on a mathematical adventure perfect for elementary school students.">
+   <!-- <meta property="og:image" content="https://duchuynh.online/path-to-game-preview.png"> -->
+   
+   <!-- Twitter -->
+   <meta name="twitter:card" content="summary_large_image">
+   <meta name="twitter:url" content="https://duchuynh.online/counting-caterpillar">
+   <meta name="twitter:title" content="Counting Caterpillar Math Adventure">
+   <meta name="twitter:description" content="Fun and interactive way to learn skip counting with a growing caterpillar. Perfect for kids learning basic math!">
+   <meta name="twitter:image" content="https://duchuynh.online/path-to-game-preview.png">
+   
+   <!-- Additional SEO -->
+   <meta name="robots" content="index, follow">
+   <meta name="language" content="English">
+   <meta name="revisit-after" content="7 days">
+   <meta name="theme-color" content="#4ade80">
+   
+   <!-- Structured Data / Schema.org -->
+   <script type="application/ld+json">
+   {
+       "@context": "https://schema.org",
+       "@type": "WebApplication",
+       "name": "Counting Caterpillar",
+       "description": "Educational math game teaching skip counting through interactive gameplay",
+       "image": "https://duchuynh.online/path-to-game-preview.png",
+       "url": "https://duchuynh.online/counting-caterpillar",
+       "applicationCategory": "EducationalApplication",
+       "genre": "Educational Game",
+       "audience": {
+           "@type": "EducationalAudience",
+           "educationalRole": "student",
+           "educationalLevel": "Elementary"
+       },
+       "educationalUse": ["Interactive Teaching", "Practice"],
+       "educationalAlignment": {
+           "@type": "AlignmentObject",
+           "alignmentType": "teaches",
+           "educationalFramework": "Mathematics",
+           "targetName": "Skip counting and number sequences"
+       },
+       "offers": {
+           "@type": "Offer",
+           "price": "0",
+           "priceCurrency": "USD"
+       },
+       "featureList": [
+           "Skip counting practice",
+           "Interactive gameplay",
+           "Visual learning",
+           "Progressive difficulty",
+           "Instant feedback"
+       ]
+   }
+   </script>
+
+   <!-- App Specific Meta -->
+   <meta name="apple-mobile-web-app-capable" content="yes">
+   <meta name="apple-mobile-web-app-status-bar-style" content="black">
+   <meta name="apple-mobile-web-app-title" content="Counting Caterpillar">
+   <meta name="application-name" content="Counting Caterpillar">
+   
+   <!-- Mobile App Icons -->
+   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+   <link rel="manifest" href="/site.webmanifest">
+   
+   <!-- Preconnect to External Resources -->
+   <link rel="preconnect" href="https://cdn.tailwindcss.com">
+   <link rel="preconnect" href="https://cdn.jsdelivr.net">
+   
+   <!-- Canonical URL -->
+   <link rel="canonical" href="https://duchuynh.online/counting-caterpillar">
+   
+   <!-- PWA Meta Tags -->
+   <meta name="mobile-web-app-capable" content="yes">
+   <meta name="format-detection" content="telephone=no">
+   
+   <!-- Accessibility Meta -->
+   <meta name="accessibility" content="WCAG2A">
+
+   <!-- Social Media -->
+   <meta property="og:site_name" content="Educational Math Games">
+   <meta property="og:locale" content="en_US">
+   <meta name="twitter:creator" content="@yourusername">
+   
+   <!-- App Store Links (if applicable) -->
+   <meta name="apple-itunes-app" content="app-id=yourappid">
+   <meta name="google-play-app" content="app-id=yourappid">
+   
+   <!-- Web App Manifest -->
+   <link rel="manifest" href="/manifest.json">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes bounce-in {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .rainbow-bg {
+            background: linear-gradient(45deg, #4ade80, #60a5fa, #f472b6);
+            background-size: 200% 200%;
+            animation: rainbow 5s ease infinite;
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .animate-pulse-custom {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .number-button {
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+
+        .number-button:hover {
+            transform: scale(1.15) rotate(5deg);
+        }
+
+        .number-button:active {
+            transform: scale(0.95) rotate(-5deg);
+        }
+
+        .caterpillar-head {
+            animation: wiggle 3s ease-in-out infinite;
+        }
+
+        .caterpillar-segment {
+            animation: bounce-in 0.5s ease-out, float 3s ease-in-out infinite;
+            animation-delay: 0s, 0.5s;
+        }
+
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-green-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-6">
+            <h1 class="text-4xl font-bold text-center text-green-600 animate-float">
+                Counting Caterpillar Adventure
+            </h1>
+            <p class="text-center text-gray-600 mt-2 text-lg">
+                Help our friendly caterpillar grow by counting numbers!
+            </p>
+        </div>
+    </header>
+
+    <!-- Score Display -->
+    <div class="fixed top-4 right-4 bg-white rounded-xl shadow-lg p-4 animate-pulse-custom">
+        <div class="text-2xl font-bold text-green-600">
+            Score: <span id="scoreDisplay">0</span>
+        </div>
+    </div>
+
+    <!-- Main Game Container -->
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        <!-- Level Info -->
+        <div class="text-center mb-8 bg-white rounded-xl shadow-lg p-6">
+            <div class="text-2xl font-bold text-blue-600 mb-2" id="levelInfo">Level 1: Count by 1s</div>
+            <div class="text-xl text-gray-600">
+                Target Number: 
+                <span id="targetNumber" class="font-bold text-3xl text-green-600 animate-pulse">10</span>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="h-6 bg-gray-200 rounded-full overflow-hidden mb-8 shadow-lg">
+            <div id="progressBar" class="progress-bar h-full rainbow-bg w-0"></div>
+        </div>
+
+        <!-- Caterpillar Display -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <div id="caterpillar" class="flex items-center gap-3 min-h-[120px] overflow-x-auto p-4">
+                <div class="caterpillar-head flex-shrink-0 w-24 h-24 bg-gradient-to-br from-green-400 to-green-500 
+                           rounded-full flex items-center justify-center text-4xl shadow-lg">
+                    🐛
+                </div>
+            </div>
+            <div class="text-center text-2xl font-bold text-gray-700 mt-4">
+                Current Sum: <span id="currentSum">0</span>
+            </div>
+        </div>
+
+        <!-- Number Buttons -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Choose Your Numbers</h2>
+            <div id="numberButtons" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                <!-- Number buttons will be generated here -->
+            </div>
+        </div>
+
+        <!-- Control Buttons -->
+        <div class="flex justify-center gap-6 mt-8">
+            <button onclick="resetToLevel1()" class="
+                px-8 py-4 
+                bg-gradient-to-r from-red-500 to-red-600 
+                hover:from-red-600 hover:to-red-700
+                text-white text-xl font-bold 
+                rounded-xl
+                shadow-lg hover:shadow-xl
+                transform transition-all duration-300
+                hover:scale-105
+            ">
+                Start Over
+            </button>
+            <button onclick="resetLevel()" class="
+                px-8 py-4 
+                bg-gradient-to-r from-yellow-500 to-yellow-600
+                hover:from-yellow-600 hover:to-yellow-700 
+                text-white text-xl font-bold 
+                rounded-xl
+                shadow-lg hover:shadow-xl
+                transform transition-all duration-300
+                hover:scale-105
+            ">
+                Reset Level
+            </button>
+        </div>
+    </main>
+
+    <!-- Level Complete Modal -->
+    <div id="levelCompleteModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4 transform transition-all duration-300">
+            <h2 class="text-4xl font-extrabold text-green-600 text-center mb-6 animate-bounce">
+                Amazing! 🎉
+            </h2>
+            <p class="text-2xl text-center mb-6">
+                You reached <span id="completedNumber" class="font-bold text-blue-600"></span>!
+            </p>
+            <button onclick="nextLevel()" class="
+                w-full px-8 py-4
+                bg-gradient-to-r from-blue-500 to-blue-600
+                hover:from-blue-600 hover:to-blue-700
+                text-white text-2xl font-bold
+                rounded-xl
+                shadow-lg hover:shadow-xl
+                transform transition-all duration-300
+                hover:scale-105
+            ">
+                Next Level!
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const gameState = {
+            level: 1,
+            currentSum: 0,
+            targetNumber: 0,
+            skipCount: 1,
+            maxLevel: 10,
+            score: 0
+        };
+
+        const levelConfigs = [
+    { skipCount: 1, minTarget: 5, maxTarget: 15, description: "Count by 1s" },
+    { skipCount: 2, minTarget: 4, maxTarget: 24, description: "Count by 2s" }, // Adjusted range for level 2
+    { skipCount: 5, minTarget: 15, maxTarget: 50, description: "Count by 5s" },
+    { skipCount: 3, minTarget: 12, maxTarget: 36, description: "Count by 3s" },
+    { skipCount: 10, minTarget: 20, maxTarget: 100, description: "Count by 10s" },
+    { skipCount: 4, minTarget: 16, maxTarget: 40, description: "Count by 4s" },
+    { skipCount: 6, minTarget: 18, maxTarget: 60, description: "Count by 6s" },
+    { skipCount: 7, minTarget: 21, maxTarget: 70, description: "Count by 7s" },
+    { skipCount: 8, minTarget: 24, maxTarget: 80, description: "Count by 8s" },
+    { skipCount: 9, minTarget: 27, maxTarget: 90, description: "Count by 9s" }
+];
+
+function generateRandomTarget() {
+    const config = levelConfigs[gameState.level - 1];
+    // Calculate the maximum number achievable with the available buttons
+    const maxButtons = 6; // Number of buttons available
+    const maxAchievable = config.skipCount * maxButtons * Math.floor(maxButtons/2);
+    
+    // Ensure minTarget is achievable and is a multiple of skipCount
+    const minSteps = Math.ceil(config.minTarget / config.skipCount);
+    const maxSteps = Math.min(Math.floor(config.maxTarget / config.skipCount), 
+                             Math.floor(maxAchievable / config.skipCount));
+    
+    // Generate random steps and multiply by skipCount
+    const steps = Math.floor(Math.random() * (maxSteps - minSteps + 1) + minSteps);
+    gameState.targetNumber = steps * config.skipCount;
+    
+    // Validate the target is achievable with current buttons
+    while (!isTargetAchievable(gameState.targetNumber, config.skipCount)) {
+        const newSteps = Math.floor(Math.random() * (maxSteps - minSteps + 1) + minSteps);
+        gameState.targetNumber = newSteps * config.skipCount;
+    }
+}
+
+// Helper function to check if a target is achievable with current buttons
+function isTargetAchievable(target, skipCount) {
+    const numbers = Array.from({length: 6}, (_, i) => (i + 1) * skipCount);
+    return canMakeSum(numbers, target, [], 0);
+}
+
+// Recursive function to check if target can be made from available numbers
+function canMakeSum(numbers, target, used, currentSum) {
+    if (currentSum === target) return true;
+    if (currentSum > target) return false;
+    
+    for (let i = 0; i < numbers.length; i++) {
+        if (!used.includes(i)) {
+            used.push(i);
+            if (canMakeSum(numbers, target, used, currentSum + numbers[i])) {
+                return true;
+            }
+            used.pop();
+        }
+    }
+    return false;
+}
+
+        function createNumberButtons() {
+            const container = document.getElementById('numberButtons');
+            container.innerHTML = '';
+            
+            const numbersToShow = 6;
+            for (let i = 1; i <= numbersToShow; i++) {
+                const number = i * gameState.skipCount;
+                const button = document.createElement('button');
+                button.className = `
+                    number-button
+                    w-full h-24
+                    text-3xl font-bold
+                    bg-gradient-to-br from-green-300 to-green-400
+                    hover:from-green-400 hover:to-green-500
+                    rounded-2xl
+                    shadow-lg hover:shadow-xl
+                    flex items-center justify-center
+                    transform transition-all duration-300
+                    text-green-800
+                    border-4 border-green-500
+                    animate-pulse-custom
+                `;
+                button.textContent = number;
+                button.onclick = () => addSegment(number);
+                container.appendChild(button);
+            }
+        }
+
+        function addSegment(number) {
+            if (gameState.currentSum + number <= gameState.targetNumber) {
+                const segment = document.createElement('div');
+                segment.className = `
+                    caterpillar-segment
+                    flex-shrink-0 w-20 h-20
+                    bg-gradient-to-br from-green-300 to-green-400
+                    rounded-full
+                    flex items-center justify-center
+                    font-bold text-2xl text-green-800
+                    shadow-lg
+                `;
+                segment.textContent = number;
+                
+                document.getElementById('caterpillar').appendChild(segment);
+                gameState.currentSum += number;
+                updateDisplay();
+                
+                if (gameState.currentSum === gameState.targetNumber) {
+                    setTimeout(showLevelComplete, 500);
+                }
+            }
+        }
+
+        function updateDisplay() {
+            document.getElementById('currentSum').textContent = gameState.currentSum;
+            document.getElementById('targetNumber').textContent = gameState.targetNumber;
+            document.getElementById('levelInfo').textContent = 
+                `Level ${gameState.level}: ${levelConfigs[gameState.level - 1].description}`;
+            
+            const progress = (gameState.currentSum / gameState.targetNumber) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        function showLevelComplete() {
+            gameState.score += Math.floor(gameState.targetNumber * (gameState.level / 2));
+            document.getElementById('scoreDisplay').textContent = gameState.score;
+            
+            const duration = 3000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                const particleCount = 50 * (timeLeft / duration);
+                
+                confetti({
+                    ...defaults,
+                    particleCount,
+                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+                });
+                confetti({
+                    ...defaults,
+                    particleCount,
+                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+                });
+            }, 250);
+
+            document.getElementById('completedNumber').textContent = gameState.targetNumber;
+            document.getElementById('levelCompleteModal').classList.remove('hidden');
+        }
+
+        function nextLevel() {
+            if (gameState.level < gameState.maxLevel) {
+                gameState.level++;
+                const config = levelConfigs[gameState.level - 1];
+                gameState.skipCount = config.skipCount;
+                generateRandomTarget();
+                resetLevel();
+            } else {
+                alert('Congratulations! You completed all levels! 🎉');
+                resetToLevel1();
+            }
+            document.getElementById('levelCompleteModal').classList.add('hidden');
+        }
+
+        function resetToLevel1() {
+            gameState.level = 1;
+            gameState.score = 0;
+            document.getElementById('scoreDisplay').textContent = gameState.score;
+            gameState.skipCount = levelConfigs[0].skipCount;
+            generateRandomTarget();
+            resetLevel();
+        }
+
+        function resetLevel() {
+            gameState.currentSum = 0;
+            document.getElementById('caterpillar').innerHTML = `
+                <div class="caterpillar-head flex-shrink-0 w-24 h-24 bg-gradient-to-br from-green-400 to-green-500 
+                           rounded-full flex items-center justify-center text-4xl shadow-lg">
+                    🐛
+                </div>
+            `;
+            createNumberButtons();
+            updateDisplay();
+        }
+
+        // Initialize game
+        generateRandomTarget();
+        resetLevel();
+    </script>
+</body>
+</html>
