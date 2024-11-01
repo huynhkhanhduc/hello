@@ -279,10 +279,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     <!-- Score Display -->
     <div class="fixed top-4 right-4 bg-white rounded-xl shadow-lg p-4 animate-pulse-custom">
-        <div class="text-2xl font-bold text-green-600">
+        <div class="text-2l font-bold text-green-600">
             Score: <span id="scoreDisplay">0</span>
         </div>
+        <div class="text-2l font-bold text-green-600">
+            Target: <span id="targetNumberShow" class="font-bold text-3xl text-green-600 animate-pulse">10</span>
+        </div>
     </div>
+   
 
     <!-- Main Game Container -->
     <main class="max-w-4xl mx-auto px-4 py-4 overflow-x-hidden">
@@ -322,14 +326,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </div>
 
         <!-- Control Buttons -->
-        <div class="flex justify-center gap-2 md:gap-6 mt-4">
-            <button onclick="resetToLevel1()" class="control-button px-4 py-2 md:px-8 md:py-4 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm md:text-xl font-bold transition-all">
-                Start Over
-            </button>
-            <button onclick="resetLevel()" class="control-button px-4 py-2 md:px-8 md:py-4 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg text-sm md:text-xl font-bold transition-all">
-                Reset Level
-            </button>
-        </div>
+          <div class="flex justify-center gap-2 md:gap-6 mt-4">
+        <button onclick="resetToLevel1()" class="control-button px-4 py-2 md:px-8 md:py-4 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm md:text-xl font-bold transition-all">
+            Start Over
+        </button>
+        <button onclick="resetLevel()" class="control-button px-4 py-2 md:px-8 md:py-4 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg text-sm md:text-xl font-bold transition-all">
+            Reset Level
+        </button>
+    </div>
     </main>
 
     <!-- Level Complete Modal -->
@@ -424,32 +428,33 @@ function canMakeSum(numbers, target, used, currentSum) {
     return false;
 }
 
-function createNumberButtons() {
-    const container = document.getElementById('numberButtons');
-    container.innerHTML = '';
-    
-    const numbersToShow = 6;
-    for (let i = 1; i <= numbersToShow; i++) {
-        const number = i * gameState.skipCount;
-        const button = document.createElement('button');
-        button.className = `
-            number-button
-            w-full h-full
-            text-xl md:text-3xl font-bold
-            bg-gradient-to-br from-green-300 to-green-400
-            hover:from-green-400 hover:to-green-500
-            rounded-lg md:rounded-2xl
-            shadow-md hover:shadow-lg
-            flex items-center justify-center
-            transform transition-all duration-300
-            text-green-800
-            border-2 md:border-4 border-green-500
-        `;
-        button.textContent = number;
-        button.onclick = () => addSegment(number);
-        container.appendChild(button);
-    }
-}
+        function createNumberButtons() {
+            const container = document.getElementById('numberButtons');
+            container.innerHTML = '';
+            
+            const numbersToShow = 6;
+            for (let i = 1; i <= numbersToShow; i++) {
+                const number = i * gameState.skipCount;
+                const button = document.createElement('button');
+                button.className = `
+                    number-button
+                    w-full h-24
+                    text-3xl font-bold
+                    bg-gradient-to-br from-green-300 to-green-400
+                    hover:from-green-400 hover:to-green-500
+                    rounded-2xl
+                    shadow-lg hover:shadow-xl
+                    flex items-center justify-center
+                    transform transition-all duration-300
+                    text-green-800
+                    border-4 border-green-500
+                    animate-pulse-custom
+                `;
+                button.textContent = number;
+                button.onclick = () => addSegment(number);
+                container.appendChild(button);
+            }
+        }
 
         function addSegment(number) {
             if (gameState.currentSum + number <= gameState.targetNumber) {
@@ -478,6 +483,7 @@ function createNumberButtons() {
         function updateDisplay() {
             document.getElementById('currentSum').textContent = gameState.currentSum;
             document.getElementById('targetNumber').textContent = gameState.targetNumber;
+            document.getElementById('targetNumberShow').textContent = gameState.targetNumber;
             document.getElementById('levelInfo').textContent = 
                 `Level ${gameState.level}: ${levelConfigs[gameState.level - 1].description}`;
             
